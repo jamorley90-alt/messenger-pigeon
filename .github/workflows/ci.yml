@@ -37,18 +37,31 @@ jobs:
         working-directory: ios
       - name: Choose an installed iOS 26 or newer simulator
         run: echo "SIMULATOR_ID=$(python3 scripts/select-simulator.py)" >> "$GITHUB_ENV"
+      - name: Boot the simulator before starting XCTest
+        run: python3 -c 'import os,subprocess; subprocess.run(["xcrun","simctl","bootstatus",os.environ["SIMULATOR_ID"],"-b"],check=True,timeout=240)'
       - name: Compile and run device-storage and interface tests
         run: >-
           xcodebuild test
           -project ios/MessengerPigeon.xcodeproj
           -scheme MessengerPigeon
           -destination "platform=iOS Simulator,id=$SIMULATOR_ID"
+          -parallel-testing-enabled NO
+          -test-timeouts-enabled YES
+          -default-test-execution-time-allowance 60
+          -maximum-test-execution-time-allowance 120
           -resultBundlePath artifacts/ios-tests.xcresult
           CODE_SIGNING_ALLOWED=NO
+      - name: Export simulator screenshots for visual review
+        if: always()
+        run: |
+          if [ -d artifacts/ios-tests.xcresult ]; then
+            xcrun xcresulttool export attachments --path artifacts/ios-tests.xcresult --output-path artifacts/screenshots
+          fi
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: ios-test-results
-          path: artifacts/ios-tests.xcresult
+          path: |
+            artifacts/ios-tests.xcresult
+            artifacts/screenshots
           retention-days: 7
-

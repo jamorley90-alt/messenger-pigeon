@@ -21,12 +21,15 @@ jobs:
       - run: bundle install && bundle exec pod install
         working-directory: ios/IntegrationProbe
       - run: echo "SIMULATOR_ID=$(python3 scripts/select-simulator.py)" >> "$GITHUB_ENV"
+      - name: Boot the simulator before starting XCTest
+        run: python3 -c 'import os,subprocess; subprocess.run(["xcrun","simctl","bootstatus",os.environ["SIMULATOR_ID"],"-b"],check=True,timeout=240)'
       - name: Execute real cryptographic integration tests
         run: >-
           xcodebuild test
           -workspace ios/IntegrationProbe/SignalIntegrationProbe.xcworkspace
           -scheme SignalIntegrationProbe
           -destination "platform=iOS Simulator,id=$SIMULATOR_ID"
+          -parallel-testing-enabled NO
           -resultBundlePath artifacts/crypto-probe.xcresult
           CODE_SIGNING_ALLOWED=NO
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -38,4 +41,3 @@ jobs:
             ios/IntegrationProbe/Podfile.lock
             ios/IntegrationProbe/Gemfile.lock
           retention-days: 7
-

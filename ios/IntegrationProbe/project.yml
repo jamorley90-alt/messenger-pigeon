@@ -22,6 +22,9 @@ targets:
     sources: [Tests]
     dependencies:
       - target: SignalIntegrationProbe
+    settings:
+      base:
+        LD_RUNPATH_SEARCH_PATHS: '$(inherited) @loader_path/Frameworks $(BUILT_PRODUCTS_DIR)/LibSignalClient'
 schemes:
   SignalIntegrationProbe:
     build:
@@ -29,4 +32,3 @@ schemes:
         SignalIntegrationProbe: all
     test:
       targets: [SignalIntegrationProbeTests]
-
