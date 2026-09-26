@@ -10,6 +10,7 @@ settings:
     CURRENT_PROJECT_VERSION: '1'
     ENABLE_USER_SCRIPT_SANDBOXING: YES
     SWIFT_STRICT_CONCURRENCY: complete
+    GENERATE_INFOPLIST_FILE: YES
 packages:
   PigeonCore:
     path: ../packages/PigeonCore
@@ -39,12 +40,18 @@ targets:
     sources: [Tests]
     dependencies:
       - target: MessengerPigeon
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.example.messengerpigeon.tests
   MessengerPigeonUITests:
     type: bundle.ui-testing
     platform: iOS
     sources: [UITests]
     dependencies:
       - target: MessengerPigeon
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.example.messengerpigeon.uitests
 schemes:
   MessengerPigeon:
     build:
