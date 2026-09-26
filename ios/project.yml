@@ -1,0 +1,53 @@
+name: MessengerPigeon
+options:
+  minimumXcodeGenVersion: 2.44.1
+  deploymentTarget:
+    iOS: '26.0'
+settings:
+  base:
+    SWIFT_VERSION: '6.0'
+    MARKETING_VERSION: '0.1.0'
+    CURRENT_PROJECT_VERSION: '1'
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+    SWIFT_STRICT_CONCURRENCY: complete
+packages:
+  PigeonCore:
+    path: ../packages/PigeonCore
+targets:
+  MessengerPigeon:
+    type: application
+    platform: iOS
+    sources:
+      - path: MessengerPigeon
+    dependencies:
+      - package: PigeonCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: org.example.messengerpigeon.development
+        TARGETED_DEVICE_FAMILY: '1'
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: Messenger Pigeon
+        INFOPLIST_KEY_NSFaceIDUsageDescription: Unlock Messenger Pigeon to view your conversations.
+        INFOPLIST_KEY_UILaunchScreen_Generation: YES
+        INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
+        INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
+        CODE_SIGN_STYLE: Automatic
+  MessengerPigeonTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources: [Tests]
+    dependencies:
+      - target: MessengerPigeon
+  MessengerPigeonUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources: [UITests]
+    dependencies:
+      - target: MessengerPigeon
+schemes:
+  MessengerPigeon:
+    build:
+      targets:
+        MessengerPigeon: all
+    test:
+      targets: [MessengerPigeonTests, MessengerPigeonUITests]

@@ -1,0 +1,11 @@
+platform :ios, '26.0'
+use_frameworks!
+ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] = 'db25764598c9171a2c8eac3199a0d881611e493bbae3ab1355e5fb88927271cf'
+
+target 'SignalIntegrationProbe' do
+  pod 'LibSignalClient', :git => 'https://github.com/signalapp/libsignal.git', :commit => 'e8cc2dddd578859b4a029c9c94670b24ce2b616a'
+  target 'SignalIntegrationProbeTests' do
+    inherit! :search_paths
+  end
+end
+

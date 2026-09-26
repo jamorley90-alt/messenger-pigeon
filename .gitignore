@@ -1,0 +1,14 @@
+.tools/
+.build/
+.DS_Store
+DerivedData/
+Pods/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.p12
+*.mobileprovision
+*.p8
+.env
+artifacts/
+coverage.out
+

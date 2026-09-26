@@ -1,0 +1,54 @@
+name: Development checks
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: checks-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-go@40f1582b2485089dde7abd97c1529aa768e1baff # v5
+        with:
+          go-version: '1.27.1'
+          cache: false
+      - run: go test -race -coverprofile=coverage.out ./...
+        working-directory: backend
+      - run: go vet ./...
+        working-directory: backend
+      - run: node --test scripts/*.test.mjs
+      - name: Confirm incomplete build is blocked from release
+        run: node scripts/verify-release.mjs --expect-blocked
+  ios:
+    # Free public-repository standard runners only, per project budget.
+    if: github.event.repository.private == false
+    runs-on: macos-26
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - run: bash scripts/install-xcodegen.sh
+      - run: swift test --package-path packages/PigeonCore
+      - run: xcodegen generate
+        working-directory: ios
+      - name: Choose an installed iOS 26 or newer simulator
+        run: echo "SIMULATOR_ID=$(python3 scripts/select-simulator.py)" >> "$GITHUB_ENV"
+      - name: Compile and run device-storage and interface tests
+        run: >-
+          xcodebuild test
+          -project ios/MessengerPigeon.xcodeproj
+          -scheme MessengerPigeon
+          -destination "platform=iOS Simulator,id=$SIMULATOR_ID"
+          -resultBundlePath artifacts/ios-tests.xcresult
+          CODE_SIGNING_ALLOWED=NO
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        if: always()
+        with:
+          name: ios-test-results
+          path: artifacts/ios-tests.xcresult
+          retention-days: 7
+
