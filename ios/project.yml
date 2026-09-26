@@ -32,6 +32,7 @@ targets:
         INFOPLIST_KEY_UIApplicationSceneManifest_Generation: YES
         INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents: YES
         CODE_SIGN_STYLE: Automatic
+        CODE_SIGN_ENTITLEMENTS: MessengerPigeon/MessengerPigeon.entitlements
   MessengerPigeonTests:
     type: bundle.unit-test
     platform: iOS

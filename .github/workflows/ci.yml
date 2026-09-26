@@ -50,7 +50,8 @@ jobs:
           -default-test-execution-time-allowance 60
           -maximum-test-execution-time-allowance 120
           -resultBundlePath artifacts/ios-tests.xcresult
-          CODE_SIGNING_ALLOWED=NO
+          CODE_SIGNING_ALLOWED=YES
+          CODE_SIGN_IDENTITY=-
       - name: Export simulator screenshots for visual review
         if: always()
         run: |

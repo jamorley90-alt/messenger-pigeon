@@ -27,7 +27,7 @@ The server binds only to `127.0.0.1:8080`; non-development startup fails closed.
 
 ## iPhone development
 
-On a Mac with Xcode supporting iOS 26, install XcodeGen 2.44.1, run `xcodegen generate` from `ios/`, and open `MessengerPigeon.xcodeproj`. The unsigned simulator target needs no Apple credentials or external Swift packages. The app requires iOS 26+. Run the pure lifecycle tests using `swift test --package-path packages/PigeonCore`.
+On a Mac with Xcode supporting iOS 26, install XcodeGen 2.44.1, run `xcodegen generate` from `ios/`, and open `MessengerPigeon.xcodeproj`. The simulator uses ad-hoc signing for Keychain entitlements and needs no Apple credentials or external Swift packages. The app requires iOS 26+. Run the pure lifecycle tests using `swift test --package-path packages/PigeonCore`.
 
 The separate `ios/IntegrationProbe` target compiles and exercises the pinned libsignal API via CocoaPods. It does not enable live messaging. See its README for instructions and native build requirements.
 
