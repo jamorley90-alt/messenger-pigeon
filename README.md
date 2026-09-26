@@ -8,10 +8,12 @@ Native iPhone messaging project based on the supplied technical design. This rep
 - A platform-independent Swift lifecycle package with deterministic expiry and replay tests.
 - Authenticated application-payload validation and bucket padding, ready for the native protocol adapter.
 - A Go development API for accounts, contact consent, blocking and an ephemeral opaque-envelope relay, with automated adversarial tests.
-- A macOS CI workflow that generates the Xcode project, runs Swift tests and compiles the simulator app.
+- A macOS CI workflow that generates the Xcode project, runs Swift, Keychain and interface tests, and exports a simulator screenshot.
 - A pinned libsignal integration probe; release gates prevent publishing incomplete security integrations.
 
 The preview uses fictional messages and never connects to the relay. The app's live mode is intentionally unavailable until the gates in `docs/RELEASE-GATES.md` pass. The development API must not be exposed publicly: its account store and abuse limits are process-local, and it has no production transport or cryptographic attestation.
+
+Verified milestone: [development checks](https://github.com/jamorley90-alt/messenger-pigeon/actions/runs/36243082355) and the [native libsignal probe](https://github.com/jamorley90-alt/messenger-pigeon/actions/runs/36242063699) pass: 43 tests, with one hardware-only file-protection test skipped. See [release gates](docs/RELEASE-GATES.md) for the remaining live-beta blockers and continuation order.
 
 ## Backend development
 

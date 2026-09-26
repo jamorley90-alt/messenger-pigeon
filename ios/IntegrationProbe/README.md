@@ -13,6 +13,6 @@ bundle exec pod install
 xcodebuild test -workspace SignalIntegrationProbe.xcworkspace -scheme SignalIntegrationProbe -destination 'platform=iOS Simulator,name=iPhone 17' CODE_SIGNING_ALLOWED=NO
 ```
 
-The CI runner selects an available iPhone simulator instead of relying on the example device name. Commit the generated Podfile.lock and Gemfile.lock after the first successful resolution; release remains blocked until transitive tools are locked and the simulator/device results are recorded.
+The CI runner selects an available iPhone simulator instead of relying on the example device name. The Podfile.lock and Gemfile.lock are retained from the successful hosted test run. All four native probe tests passed at source revision `7e76514` in https://github.com/jamorley90-alt/messenger-pigeon/actions/runs/36242063699. Device-level protocol integration remains unverified.
 
 The test stores are upstream in-memory stores. They must never become the app's production storage or identity-verification policy. The probe tests initial hybrid session exchange, reply, tamper rejection, replay rejection and sealed-sender wrapping/certificate validation. It does not establish persistent ratchet crash safety, all Triple Ratchet downgrade paths, key transparency, or device-level security.

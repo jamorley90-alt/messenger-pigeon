@@ -2,13 +2,13 @@
   "schemaVersion": 1,
   "releaseStatus": "blocked",
   "gates": [
-    {"id":"native-build","status":"pending","reason":"Public GitHub repository created; Mac build evidence pending."},
-    {"id":"protocol-integration","status":"pending","reason":"Pinned native tests written; persistent stores, application envelope validation and downgrade enforcement not integrated."},
+    {"id":"native-build","status":"passed","reason":"Hosted Xcode simulator build, 13 core tests, 3 vault tests and 1 UI test pass. Physical file-protection test explicitly skipped; device verification is a separate gate.","evidence":["https://github.com/jamorley90-alt/messenger-pigeon/actions/runs/36243082355","https://github.com/jamorley90-alt/messenger-pigeon/actions/runs/36242063699"]},
+    {"id":"protocol-integration","status":"pending","reason":"All four pinned native probe tests pass; durable stores, application payload and downgrade enforcement are not integrated into live messaging."},
     {"id":"key-transparency","status":"blocked","reason":"Upstream Swift verifier is coupled to Signal chat transport/environment; standalone adapter and independent auditor required."},
     {"id":"live-backend","status":"pending","reason":"Only loopback development API exists. PostgreSQL account store, production abuse controls, certificates and hosting are pending."},
     {"id":"hybrid-tls-and-pins","status":"pending","reason":"Go handshake policy passes local tests; actual endpoint and iPhone pin/rotation tests pending."},
     {"id":"notifications","status":"pending","reason":"APNs credentials, generic push delivery and device tests pending."},
-    {"id":"device-lifecycle","status":"pending","reason":"Swift tests written but not run; physical device tests pending."},
+    {"id":"device-lifecycle","status":"pending","reason":"All 13 Swift core tests pass on macOS; physical-device acceptance tests remain pending."},
     {"id":"two-person-review","status":"pending","reason":"Second developer review of crypto, key and storage integration is required."},
     {"id":"licensing-and-sbom","status":"pending","reason":"AGPL source licence included; distribution compatibility, transitive locks, notices and SBOM pending."},
     {"id":"apple-distribution","status":"pending","reason":"Team ID, bundle ID, signing, icon, privacy information and export declarations pending."}

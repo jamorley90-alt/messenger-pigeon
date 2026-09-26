@@ -13,7 +13,9 @@ No Apple credentials are stored in this repository. The development bundle ID is
 
 ## First Mac build
 
-Push the current tree to the approved repository. Run `Development checks`, then manually run `Native libsignal feasibility probe`. Inspect the Xcode result bundles, correct failures, and retain reviewed evidence. The workflows do not sign, upload or claim that a private-messaging demo is ready.
+The source is published. Run `Development checks` after source changes, and manually run `Native libsignal feasibility probe` when the pinned protocol integration changes. Inspect the Xcode result bundles and retain reviewed evidence. The app workflow uses ad-hoc simulator signing to exercise Keychain access; neither workflow produces a device-signed archive or uploads to TestFlight.
+
+`testFileHasCompleteProtectionOnDevice` is explicitly skipped in the simulator. Run it on both physical iPhones, and also verify that protected files and Keychain keys are unavailable while locked. A green simulator build does not satisfy this release check.
 
 ## Release after the gates pass
 
