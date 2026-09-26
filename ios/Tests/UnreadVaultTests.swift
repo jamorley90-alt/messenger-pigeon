@@ -28,16 +28,30 @@ final class UnreadVaultTests: XCTestCase {
         try FileManager.default.removeItem(at: directory)
     }
 
-    func testFileHasProtectionAndBackupExclusion() async throws {
+    func testFileIsExcludedFromBackup() async throws {
         let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
         let vault = try UnreadVault(directory: directory, keychainService: "pigeon-tests.\(UUID().uuidString)")
         let now = Date(); let id = UUID()
         try await vault.save(.init(id: id, acceptedAt: now, unreadDeadline: now.addingTimeInterval(86_400), text: "Protection fixture"))
         let file = directory.appendingPathComponent(id.uuidString).appendingPathExtension("sealed")
         XCTAssertEqual(try file.resourceValues(forKeys: [.isExcludedFromBackupKey]).isExcludedFromBackup, true)
+        try await vault.discard(id)
+        try FileManager.default.removeItem(at: directory)
+    }
+
+    func testFileHasCompleteProtectionOnDevice() async throws {
+        #if targetEnvironment(simulator)
+        throw XCTSkip("File Data Protection requires a physical iPhone; simulator success cannot attest to protection.")
+        #else
+        let directory = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let vault = try UnreadVault(directory: directory, keychainService: "pigeon-tests.\(UUID().uuidString)")
+        let now = Date(); let id = UUID()
+        try await vault.save(.init(id: id, acceptedAt: now, unreadDeadline: now.addingTimeInterval(86_400), text: "Protection fixture"))
+        let file = directory.appendingPathComponent(id.uuidString).appendingPathExtension("sealed")
         let attributes = try FileManager.default.attributesOfItem(atPath: file.path)
         XCTAssertEqual(attributes[.protectionKey] as? FileProtectionType, .complete)
         try await vault.discard(id)
         try FileManager.default.removeItem(at: directory)
+        #endif
     }
 }
